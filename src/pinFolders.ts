@@ -30,24 +30,30 @@ export class PinFoldersTreeDataProvider implements vscode.TreeDataProvider<PinTr
 	async getChildren(element?: PinTreeItem): Promise<PinTreeItem[]> {
 		if (this.pinnedFolders.length === 0) {
 			vscode.window.showInformationMessage('No dependency in empty workspace');
-			return Promise.resolve([]);
+			return [];
 		}
 		if (element) {
 			return this.getFilesinDirectory(element);
 		} else {
-			return Promise.all(this.pinnedFolders.map(async (item) => {
-				var stat = await vscode.workspace.fs.stat(item[0]);
-				if ((stat.type & vscode.FileType.Directory) === vscode.FileType.Directory) {
-					return new PinTreeItem(true, item[0], vscode.TreeItemCollapsibleState.Collapsed, undefined, item[1]);
-				} else {
-					var command = {
-						command: 'vscode.open',
-						title: 'open',
-						arguments: [item[0]]
-					};
-					return new PinTreeItem(false, item[0], vscode.TreeItemCollapsibleState.None, command, item[1]);
+			var ret = await Promise.all(this.pinnedFolders.map(async (item) => {
+				try {
+					var stat = await vscode.workspace.fs.stat(item[0]);
+					if ((stat.type & vscode.FileType.Directory) === vscode.FileType.Directory) {
+						return new PinTreeItem(true, item[0], vscode.TreeItemCollapsibleState.Collapsed, undefined, item[1]);
+					} else {
+						var command = {
+							command: 'vscode.open',
+							title: 'open',
+							arguments: [item[0]]
+						};
+						return new PinTreeItem(false, item[0], vscode.TreeItemCollapsibleState.None, command, item[1]);
+					}
+				} catch (error) {
+					console.log(`ran into error ${error}`);
+					return null;
 				}
 			}));
+			return ret.filter(x => x !== null) as PinTreeItem[];
 		}
 	}
 
@@ -87,9 +93,9 @@ export class PinTreeItem extends vscode.TreeItem {
 	) {
 		var givenName = name ?? path.basename(uri.fsPath);
 		super(givenName, collapsibleState);
-		this.tooltip = name;
+		this.tooltip = uri.fsPath;
 		this.uri = uri;
-		this.description = name;
+		this.description = givenName === path.basename(uri.fsPath) ? '' : path.basename(uri.fsPath);
 		this.command = command;
 	}
 }

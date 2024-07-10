@@ -3,7 +3,7 @@
   "displayName": "Pin Folders",
   "description": "Pin Folders for easier access",
   "license": "Apache-2.0",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "shivaprasanth",
   "repository": {
     "url": "https://github.com/cedric05/vscode-pin-folders"

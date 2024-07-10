@@ -1,6 +1,9 @@
 import * as vscode from 'vscode';
 import { PinFoldersTreeDataProvider } from './pinFolders';
 import path from 'path';
+import os = require("os");
+
+var hostname = os.hostname();
 
 export async function pickDirectoryToImport(): Promise<([string, string] | undefined)> {
 	const importUri = await vscode.window.showOpenDialog({
@@ -22,27 +25,29 @@ export async function pickDirectoryToImport(): Promise<([string, string] | undef
 	return [folder.fsPath, name ?? defaultName];
 }
 
-const PinnedFoldersKey = "pinned-folders";
+const pinFoldersSub = `pinned-folders`;
+
+const pinFoldersSubKey = `${hostname}-${pinFoldersSub}`;
 async function addEntry(context: vscode.ExtensionContext) {
 	var folder = await pickDirectoryToImport();
 	if (folder) {
-		var pinnedFolders: Array<[string, string]> = context.globalState.get(PinnedFoldersKey) ?? [];
+		var pinnedFolders: Array<[string, string]> = context.globalState.get(pinFoldersSubKey) ?? [];
 		pinnedFolders.push(folder);
-		context.globalState.update(PinnedFoldersKey, pinnedFolders);
-		vscode.commands.executeCommand(`${PinnedFoldersKey}.refreshEntry`);
+		context.globalState.update(pinFoldersSubKey, pinnedFolders);
+		vscode.commands.executeCommand(`${pinFoldersSub}.refreshEntry`);
 	}
 }
 
 export function activate(context: vscode.ExtensionContext) {
-	var folderList: Array<[string, string]> = context.globalState.get(PinnedFoldersKey) ?? [];
+	var folderList: Array<[string, string]> = context.globalState.get(pinFoldersSubKey) ?? [];
 	const alwaysTreeItemProvider = new PinFoldersTreeDataProvider(folderList);
-	vscode.window.registerTreeDataProvider(PinnedFoldersKey, alwaysTreeItemProvider);
-	vscode.commands.registerCommand(`${PinnedFoldersKey}.refreshEntry`, () => {
-		const pinnedFolders: Array<[string, string]> = context.globalState.get(PinnedFoldersKey) ?? [];
+	vscode.window.registerTreeDataProvider(pinFoldersSub, alwaysTreeItemProvider);
+	vscode.commands.registerCommand(`${pinFoldersSub}.refreshEntry`, () => {
+		const pinnedFolders: Array<[string, string]> = context.globalState.get(pinFoldersSubKey) ?? [];
 		alwaysTreeItemProvider.updateWorksapaceRoot(pinnedFolders);
 		alwaysTreeItemProvider.refresh();
 	});
-	vscode.commands.registerCommand(`${PinnedFoldersKey}.addEntry`, () => addEntry(context));
+	vscode.commands.registerCommand(`${pinFoldersSub}.addEntry`, () => addEntry(context));
 }
 
 export function deactivate() { }
