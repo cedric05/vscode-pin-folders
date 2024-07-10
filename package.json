@@ -2,15 +2,15 @@
   "name": "vscode-always-sidebar",
   "displayName": "Pin Folders",
   "description": "Pin Folders for easier access",
-	"license": "Apache-2.0",
-  "version": "0.0.1",
+  "license": "Apache-2.0",
+  "version": "0.0.2",
   "publisher": "shivaprasanth",
   "repository": {
-		"url": "https://github.com/cedric05/vscode-pin-folders"
-	},
+    "url": "https://github.com/cedric05/vscode-pin-folders"
+  },
   "sponsor": {
-		"url": "https://github.com/sponsors/cedric05"
-	},
+    "url": "https://github.com/sponsors/cedric05"
+  },
   "engines": {
     "vscode": "^1.88.0"
   },
@@ -18,20 +18,20 @@
     "Other"
   ],
   "keywords": [
-		"Pin",
+    "Pin",
     "Folders",
     "Always",
     "Quick"
-	],
+  ],
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-				"command": "pinned-folders.refreshEntry",
-				"title": "Refresh",
-				"icon": "$(refresh)"
-			},
+        "command": "pinned-folders.refreshEntry",
+        "title": "Refresh",
+        "icon": "$(refresh)"
+      },
       {
         "command": "pinned-folders.addEntry",
         "title": "Add Entry",
@@ -59,16 +59,16 @@
     },
     "menus": {
       "view/title": [
-				{
-					"command": "pinned-folders.refreshEntry",
-					"when": "view == pinned-folders",
-					"group": "navigation"
-				},
         {
-					"command": "pinned-folders.addEntry",
-					"when": "view == pinned-folders",
-					"group": "navigation"
-				}
+          "command": "pinned-folders.refreshEntry",
+          "when": "view == pinned-folders",
+          "group": "navigation"
+        },
+        {
+          "command": "pinned-folders.addEntry",
+          "when": "view == pinned-folders",
+          "group": "navigation"
+        }
       ]
     }
   },
