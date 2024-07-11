@@ -3,7 +3,7 @@
   "displayName": "Pin Folders",
   "description": "Pin Folders for easier access",
   "license": "Apache-2.0",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "shivaprasanth",
   "repository": {
     "url": "https://github.com/cedric05/vscode-pin-folders"
@@ -29,13 +29,32 @@
     "commands": [
       {
         "command": "pinned-folders.refreshEntry",
-        "title": "Refresh",
-        "icon": "$(refresh)"
+        "title": "Refresh Pinned Folders",
+        "icon": "$(sync)",
+        "category": "Pinned Folders"
       },
       {
         "command": "pinned-folders.addEntry",
-        "title": "Add Entry",
-        "icon": "$(add)"
+        "title": "Bookmark/Add File/Directory to Pinned Folders",
+        "icon": "$(plus)",
+        "category": "Pinned Folders"
+      },
+      {
+        "command": "pinned-folders.addEntryFromExplorer",
+        "title": "Add to Pinned/Bookmarked Folders",
+        "category": "Pinned Folders"
+      },
+      {
+        "command": "pinned-folders.renameEntry",
+        "title": "Rename Bookmark/Entry in Pinned Folders",
+        "category": "Pinned Folders",
+        "icon": "$(pencil)"
+      },
+      {
+        "command": "pinned-folders.removeEntry",
+        "title": "Remove Bookmark/Entry from Pinned Folders",
+        "category": "Pinned Folders",
+        "icon": "$(trash)"
       }
     ],
     "viewsContainers": {
@@ -68,6 +87,25 @@
           "command": "pinned-folders.addEntry",
           "when": "view == pinned-folders",
           "group": "navigation"
+        }
+      ],
+      "explorer/context": [
+        {
+          "when": "resourceScheme==file",
+          "command": "pinned-folders.addEntryFromExplorer",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "pinned-folders.removeEntry",
+          "when": "view == pinned-folders && viewItem == pinnedFolder",
+          "group": "inline"
+        },
+        {
+          "command": "pinned-folders.renameEntry",
+          "when": "view == pinned-folders && viewItem == pinnedFolder",
+          "group": "inline"
         }
       ]
     }

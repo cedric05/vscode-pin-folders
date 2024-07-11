@@ -97,5 +97,12 @@ export class PinTreeItem extends vscode.TreeItem {
 		this.uri = uri;
 		this.description = givenName === path.basename(uri.fsPath) ? '' : path.basename(uri.fsPath);
 		this.command = command;
+		// Name is sent only for pinned folders and not for subfolders
+		// so we can differentiate between them without extra flag
+		if (name) {
+			this.contextValue = 'pinnedFolder';
+		} else {
+			this.contextValue = 'subFolder';
+		}
 	}
 }
