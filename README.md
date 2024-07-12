@@ -1,4 +1,4 @@
-# vscode-always-sidebar README
+# vscode-always-sidebar
 
 Pins Specific file/folders for easier access, whenever vscode is opened. The idea is to quickly access frequently used files and folders without navigating through the entire directory structure every time.
 
