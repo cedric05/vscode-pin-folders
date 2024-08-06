@@ -23,6 +23,6 @@ To use this extension, follow these steps:
 
 2. Delete Pinned Folders: Users have the ability to remove any pinned folders that are no longer needed, providing flexibility and decluttering options.
 
-3. Export Pinned Folders: Users can export their list of pinned folders, allowing for easy sharing or backup purposes.
+3. Pin from Workspace/Sidebar: Instead of having to open the native window, users can directly pin folders from the opened workspace or sidebar, enhancing accessibility and convenience.
 
-4. Pin from Workspace/Sidebar: Instead of having to open the native window, users can directly pin folders from the opened workspace or sidebar, enhancing accessibility and convenience.
+4. Open Pinned folders: Open folder in vscode

@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { PinFoldersTreeDataProvider, PinTreeItem } from './pinFolders';
 import path from 'path';
 import os = require("os");
+import { open } from 'fs';
 
 var hostname = os.hostname();
 
@@ -94,7 +95,11 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const addEntryCommand = vscode.commands.registerCommand(`${pinFoldersSub}.addEntry`, () => addEntry(context));
 
-	context.subscriptions.push(refreshEntryCommand, removeEntryCommand, addEntryCommand, renameEntryCommand, addEntryFromExplorer);
+	const openInNewWindowCommand = vscode.commands.registerCommand(`${pinFoldersSub}.openInNewWindow`, async (item: PinTreeItem) => {
+		vscode.commands.executeCommand('vscode.openFolder', item.uri, true);
+	});
+
+	context.subscriptions.push(refreshEntryCommand, removeEntryCommand, addEntryCommand, renameEntryCommand, addEntryFromExplorer, openInNewWindowCommand);
 }
 
 export function deactivate() { }

@@ -3,7 +3,7 @@
   "displayName": "Pin Folders",
   "description": "Pin Folders for easier access",
   "license": "Apache-2.0",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publisher": "shivaprasanth",
   "repository": {
     "url": "https://github.com/cedric05/vscode-pin-folders"
@@ -55,6 +55,12 @@
         "title": "Remove Bookmark/Entry from Pinned Folders",
         "category": "Pinned Folders",
         "icon": "$(trash)"
+      },
+      {
+        "command": "pinned-folders.openInNewWindow",
+        "title": "Open Pinned Folder in Vscode Desktop",
+        "category": "Pinned Folders",
+        "icon": "$(file-code)"
       }
     ],
     "viewsContainers": {
@@ -104,6 +110,11 @@
         },
         {
           "command": "pinned-folders.renameEntry",
+          "when": "view == pinned-folders && viewItem == pinnedFolder",
+          "group": "inline"
+        },
+        {
+          "command": "pinned-folders.openInNewWindow",
           "when": "view == pinned-folders && viewItem == pinnedFolder",
           "group": "inline"
         }
