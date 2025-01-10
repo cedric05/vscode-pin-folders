@@ -24,6 +24,7 @@ export class PinFoldersTreeDataProvider implements vscode.TreeDataProvider<PinTr
 	}
 
 	getTreeItem(element: PinTreeItem): vscode.TreeItem {
+		element.resourceUri = vscode.Uri.file(element.uri.fsPath);
 		return element;
 	}
 
