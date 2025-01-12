@@ -18,7 +18,6 @@ jobs:
           node-version: 20.18.0
       - run: |
           npm install
-          npx vsce package
   publish-vscode-market-place:
     runs-on: ubuntu-latest
     needs: [build]
@@ -28,10 +27,9 @@ jobs:
         with:
           node-version: 20.18.0
       - uses: actions/download-artifact@v4
-      - run: npx vsce publish --packagePath $(find . -iname *.vsix)
+      - run: npx vsce publish
         env:
           VSCE_PAT: ${{ secrets.MARKETPLACE_PAT }}
-        continue-on-error: true
   publish-ovsx:
     runs-on: ubuntu-latest
     needs: [build]
@@ -41,7 +39,7 @@ jobs:
         with:
           node-version: 20.18.0
       - uses: actions/download-artifact@v4
-      - run: npx ovsx publish --packagePath $(find . -iname *.vsix)
+      - run: npx ovsx publish
         env:
           OVSX_PAT: ${{ secrets.OVSX_ACCESS_TOKEN }}
         continue-on-error: true
