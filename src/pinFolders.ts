@@ -24,7 +24,6 @@ export class PinFoldersTreeDataProvider implements vscode.TreeDataProvider<PinTr
 	}
 
 	getTreeItem(element: PinTreeItem): vscode.TreeItem {
-		element.resourceUri = vscode.Uri.file(element.uri.fsPath);
 		return element;
 	}
 
@@ -96,6 +95,7 @@ export class PinTreeItem extends vscode.TreeItem {
 		super(givenName, collapsibleState);
 		this.tooltip = uri.fsPath;
 		this.uri = uri;
+		this.resourceUri = uri;
 		this.description = givenName === path.basename(uri.fsPath) ? '' : path.basename(uri.fsPath);
 		this.command = command;
 		// Name is sent only for pinned folders and not for subfolders
