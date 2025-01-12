@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20.18.0
-      - run: npx vsce package --target ${{ env.target }}
+      - run: npx vsce package
   publish-vscode-market-place:
     runs-on: ubuntu-latest
     needs: [build]
