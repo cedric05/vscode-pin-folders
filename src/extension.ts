@@ -99,7 +99,30 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.executeCommand('vscode.openFolder', item.uri, true);
 	});
 
-	context.subscriptions.push(refreshEntryCommand, removeEntryCommand, addEntryCommand, renameEntryCommand, addEntryFromExplorer, openInNewWindowCommand);
+	const updateOrderCommand = vscode.commands.registerCommand('pinned-folders.updateOrder', (newOrder: Array<[string, string]>) => {
+		context.globalState.update(pinFoldersSubKey, newOrder);
+		alwaysTreeItemProvider.updateWorksapaceRoot(newOrder);
+		alwaysTreeItemProvider.refresh();
+	});
+
+	// Register drag and drop handler
+	vscode.window.createTreeView(pinFoldersSub, {
+		treeDataProvider: alwaysTreeItemProvider,
+		dragAndDropController: {
+			dropMimeTypes: ['application/vnd.code.tree.pinned-folders'],
+			dragMimeTypes: ['application/vnd.code.tree.pinned-folders'],
+			handleDrag: (source: readonly vscode.TreeItem[], dataTransfer: vscode.DataTransfer, token: vscode.CancellationToken) => {
+				dataTransfer.set('application/vnd.code.tree.pinned-folders', new vscode.DataTransferItem(source));
+			},
+			handleDrop: async (target: vscode.TreeItem | undefined, dataTransfer: vscode.DataTransfer, token: vscode.CancellationToken) => {
+				const transferItem = await dataTransfer.get('application/vnd.code.tree.pinned-folders');
+				const sources = transferItem?.value as vscode.TreeItem[];
+				alwaysTreeItemProvider.handleDrag(sources as PinTreeItem[], target as PinTreeItem);
+			}
+		}
+	});
+
+	context.subscriptions.push(refreshEntryCommand, removeEntryCommand, addEntryCommand, renameEntryCommand, addEntryFromExplorer, openInNewWindowCommand, updateOrderCommand);
 }
 
 export function deactivate() { }
