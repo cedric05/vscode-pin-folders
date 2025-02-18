@@ -80,9 +80,36 @@ export class PinFoldersTreeDataProvider implements vscode.TreeDataProvider<PinTr
 		}
 	}
 
+	public handleDrag(source: PinTreeItem[], target: PinTreeItem | undefined): void {
+		if (!target) {
+			return;
+		}
+		
+		// Only allow reordering at root level
+		if (target.contextValue !== 'pinnedFolder' || source[0].contextValue !== 'pinnedFolder') {
+			return;
+		}
+
+		const sourceIndex = this.pinnedFolders.findIndex(([uri]) => uri.fsPath === source[0].uri.fsPath);
+		const targetIndex = this.pinnedFolders.findIndex(([uri]) => uri.fsPath === target.uri.fsPath);
+		
+		if (sourceIndex === -1 || targetIndex === -1) {
+			return;
+		}
+
+		// Move the item to new position
+		const [movedItem] = this.pinnedFolders.splice(sourceIndex, 1);
+		this.pinnedFolders.splice(targetIndex, 0, movedItem);
+		
+		// Update global state and refresh
+		const newPinnedFolders = this.pinnedFolders.map(([uri, name]) => [uri.fsPath, name]);
+		vscode.commands.executeCommand('pinned-folders.updateOrder', newPinnedFolders);
+	}
+
 }
 
 export class PinTreeItem extends vscode.TreeItem {
+	public draggable?: boolean;
 
 	constructor(
 		public readonly isDirectory: boolean,
@@ -102,8 +129,10 @@ export class PinTreeItem extends vscode.TreeItem {
 		// so we can differentiate between them without extra flag
 		if (name) {
 			this.contextValue = 'pinnedFolder';
+			this.draggable = true;
 		} else {
 			this.contextValue = 'subFolder';
+			this.draggable = false;
 		}
 	}
 }
